@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
+import ModalBox from "../components/ModalBox"
+
 
 
 const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
@@ -28,18 +31,24 @@ const HomePage = () => {
                     {movies.map(m => {
                         return (
                             <Col>
-                                <Link as={Link} to={`movies/${m.id}`}>
-                                    <Card className='m-3' style={{ width: '18rem' }}>
-                                        <Card.Img variant="top" src={"https://image.tmdb.org/t/p/w500/" + m.backdrop_path} />
-                                        <Card.Body>
-                                            <Card.Title>{m.title}</Card.Title>
-                                            <Card.Text style={{ height: 200, overflow: 'hidden', overflowY: 'auto' }}>
-                                                {m.overview}
-                                            </Card.Text>
-                                            <Button variant="primary">Go somewhere</Button>
-                                        </Card.Body>
-                                    </Card>
-                                </Link>
+                                <Card className='m-3' style={{ width: '18rem' }}>
+                                    <Card.Img variant="top" src={"https://image.tmdb.org/t/p/w500/" + m.backdrop_path} />
+                                    <Card.Body>
+                                        <Card.Title>{m.title}</Card.Title>
+                                        <Card.Text>{m.genre_ids.name}</Card.Text>
+                                        <hr className="solid"></hr>
+                                        <Card.Text style={{ height: 200, overflow: 'hidden', overflowY: 'auto' }}>
+                                            {m.overview}
+                                        </Card.Text>
+                                        <ModalBox />
+                                        <hr className="solid"></hr>
+                                        <Nav.Link as={Link} to={`movie/${m.id}`}>
+                                            Detail
+                                        </Nav.Link>
+
+                                    </Card.Body>
+                                </Card>
+
                             </Col>
                         )
                     })}

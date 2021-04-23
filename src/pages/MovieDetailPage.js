@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { Container, Jumbotron, Button, Image } from 'react-bootstrap'
 
 const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
@@ -17,14 +18,22 @@ const MovieDetailPage = () => {
 
     useEffect(() => {
         fetchMovieDetail('')
-        // eslint-disable-next-line
+        // eslint - disable - next - line
     }, [id])
 
 
     return (
-        <div>
-            <h1>{movieDetail.title}</h1>
-        </div>
+        <Container>
+            <Jumbotron className='bg-white'>
+                <h1>{movieDetail.title}</h1>
+                <hr className='solid'></hr>
+                <Image src={"https://image.tmdb.org/t/p/w500/" + movieDetail.poster_path} />
+                <hr className='solid'></hr>
+                <p>{movieDetail.overview}</p>
+                <Button variant="primary">Learn more</Button>
+            </Jumbotron>
+
+        </Container>
     )
 }
 
