@@ -10,16 +10,16 @@ const MovieDetailPage = () => {
     const [movieDetail, setMovieDetail] = useState({})
 
 
-    const fetchMovieDetail = async () => {
-        const resp = await fetch(`${BACKEND_URL}movie/${id}?api_key=${API_KEY}`)
-        const json = await resp.json()
-        console.log({ json })
-        setMovieDetail(json)
-    }
-
     useEffect(() => {
-        fetchMovieDetail('')
-        // eslint-disable-next-line
+        const fetchMovieDetail = async () => {
+            const resp = await fetch(`${BACKEND_URL}movie/${id}?api_key=${API_KEY}`)
+            const json = await resp.json()
+            console.log({ json })
+            setMovieDetail(json)
+        }
+
+        fetchMovieDetail()
+
     }, [id])
 
 
@@ -30,7 +30,7 @@ const MovieDetailPage = () => {
                 <hr className='solid'></hr>
                 <Image src={"https://image.tmdb.org/t/p/w500/" + movieDetail.poster_path} />
                 <hr className='solid'></hr>
-                <p>Genres: {movieDetail.genres.map(g => {
+                <p>Genres: {movieDetail.genres?.map(g => {
                     console.log({ g })
                     return (
                         <Button className='ml-2'>{g.name}</Button>
@@ -40,7 +40,7 @@ const MovieDetailPage = () => {
 
 
                 <p>{movieDetail.overview}</p>
-                <Button variant="primary">Learn more</Button>
+                <Button variant="primary">More</Button>
             </Jumbotron>
 
         </Container>
