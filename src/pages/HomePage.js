@@ -11,6 +11,7 @@ import NavigationBar from "../components/NavigationBar"
 const API_KEY = process.env.REACT_APP_MOVIE_DB_API_KEY
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 
+
 const HomePage = () => {
     const [movies, setMovies] = useState([])
     const [query, setQuery] = useState(``);
@@ -47,10 +48,21 @@ const HomePage = () => {
         <div>
             <NavigationBar query={query} setQuery={setQuery} />
             <Row>
+
                 <Col lg="3">
                     <SideBar />
                 </Col>
                 <Col lg="9">
+                    <button
+                        onClick={() => setMovies(movies.sort((a, b) => a.popularity - b.popularity))}
+                        className="mx-2">
+                        Most popular to Least popular
+                        </button>
+                    <button
+                        onClick={() => setMovies(movies.sort((a, b) => b.popularity - a.popularity))}
+                        className="mx-2">
+                        Least popular to  Most popular
+                        </button>
                     <Row>
                         {movies.map(m => {
                             return (
@@ -76,7 +88,7 @@ const HomePage = () => {
                                             <Card.Text>Popularity: {m.popularity}</Card.Text>
                                             <Card.Text> Release date: {m.release_date}</Card.Text>
                                             <hr className="solid"></hr>
-                                            <Nav.Link as={Link} to={`movie / ${m.id} `}>
+                                            <Nav.Link as={Link} to={`movie/${m.id}`}>
                                                 View Detail
                                         </Nav.Link>
 
