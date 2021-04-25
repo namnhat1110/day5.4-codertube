@@ -9,6 +9,7 @@ const MovieDetailPage = () => {
     const { id } = useParams()
     const [movieDetail, setMovieDetail] = useState({})
 
+
     const fetchMovieDetail = async () => {
         const resp = await fetch(`${BACKEND_URL}movie/${id}?api_key=${API_KEY}`)
         const json = await resp.json()
@@ -18,7 +19,7 @@ const MovieDetailPage = () => {
 
     useEffect(() => {
         fetchMovieDetail('')
-        // eslint - disable - next - line
+        // eslint-disable-next-line
     }, [id])
 
 
@@ -29,6 +30,15 @@ const MovieDetailPage = () => {
                 <hr className='solid'></hr>
                 <Image src={"https://image.tmdb.org/t/p/w500/" + movieDetail.poster_path} />
                 <hr className='solid'></hr>
+                <p>Genres: {movieDetail.genres.map(g => {
+                    console.log({ g })
+                    return (
+                        <Button className='ml-2'>{g.name}</Button>
+                    )
+                })}
+                </p>
+
+
                 <p>{movieDetail.overview}</p>
                 <Button variant="primary">Learn more</Button>
             </Jumbotron>
