@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Nav } from 'react-bootstrap';
+import { Row, Col, Card, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import ModalBox from "../components/ModalBox"
@@ -15,7 +15,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL
 const HomePage = () => {
     const [movies, setMovies] = useState([])
     const [query, setQuery] = useState(``);
-    // const [genre, setGenre] = useState([])
+    const [genre, setGenre] = useState([])
 
     const fetchMovies = async () => {
         let urlParams = `${BACKEND_URL}movie/upcoming?api_key=${API_KEY}`
@@ -28,21 +28,21 @@ const HomePage = () => {
         setMovies(json.results)
     }
 
-    // const fetchGenre = async () => {
-    //     const resp = await fetch(`${BACKEND_URL}genre/movie/list?api_key=${API_KEY}`)
-    //     const data = await resp.json()
-    //     console.log({ data })
-    //     setGenre(data.genres)
-    // }
+    const fetchGenre = async () => {
+        const resp = await fetch(`${BACKEND_URL}genre/movie/list?api_key=${API_KEY}`)
+        const data = await resp.json()
+        console.log({ data })
+        setGenre(data.genres)
+    }
 
     useEffect(() => {
         fetchMovies()
         // eslint-disable-next-line
     }, [query])
 
-    // useEffect(() => {
-    //     fetchGenre()
-    // }, [])
+    useEffect(() => {
+        fetchGenre()
+    }, [])
 
     return (
         <div>
@@ -51,6 +51,13 @@ const HomePage = () => {
 
                 <Col lg="3">
                     <SideBar />
+                    <Card.Title className="mt-5">
+                        {genre.map(g => {
+                            return (
+                                <Button className='m-2'>{g.name}</Button>
+                            )
+                        })}
+                    </Card.Title>
                 </Col>
                 <Col lg="9">
                     <button
