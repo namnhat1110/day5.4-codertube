@@ -1,24 +1,23 @@
-import React, { useState } from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import React from "react";
+import { Modal } from "react-bootstrap";
 
-import YoutubeEmbed from "../components/YoutubeEmbed"
+import YoutubeEmbed from "../components/YoutubeEmbed";
 
-const ModalBox = () => {
-    const [xlShow, setXlShow] = useState(false);
-    return (
-        <div>
-            <Button onClick={() => setXlShow(true)}>View Trailer</Button>
-            <Modal
-                size="xl"
-                show={xlShow}
-                onHide={() => setXlShow(false)}
-                aria-labelledby="example-modal-sizes-title-xl"
+const ModalBox = (props) => {
+  return (
+    <div>
+      <Modal
+        size="xl"
+        show={props.modalOpen}
+        onHide={props.setModalOpen}
+        aria-labelledby="example-modal-sizes-title-xl"
+      >
+        <Modal.Body>
+          <YoutubeEmbed embedId={props.movieTrailerKey.key} />
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
+};
 
-            >
-                <Modal.Body><YoutubeEmbed embedId="odM92ap8_c0" /></Modal.Body>
-            </Modal>
-        </div>
-    )
-}
-
-export default ModalBox
+export default ModalBox;
