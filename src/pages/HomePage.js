@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Card, Nav, Button } from "react-bootstrap";
+
+import {
+  Row,
+  Col,
+  Card,
+  Nav,
+  Button,
+  Container,
+  Navbar,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import ModalBox from "../components/ModalBox";
@@ -58,6 +67,7 @@ const HomePage = () => {
     }
   };
 
+
   return (
     <div>
       <NavigationBar query={query} setQuery={setQuery} />
@@ -88,11 +98,13 @@ const HomePage = () => {
             Least popular to Most popular
           </button>
           <Row>
+
             <ModalBox
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
               movieTrailerKey={movieTrailerKey}
             />
+
             {movies.map((m) => {
               return (
                 <Col>
@@ -134,6 +146,32 @@ const HomePage = () => {
           </Row>
         </Col>
       </Row>
+
+      <div>
+        <footer>
+          <Container>
+            <Row>
+              <Col>
+                <Navbar.Brand as={Link} to="/">
+                  Logo
+                </Navbar.Brand>
+              </Col>
+              <Col sm>
+                <h4>THE BASICS</h4>
+              </Col>
+              <Col sm>
+                <h4>GET INVOLVED</h4>
+              </Col>
+              <Col sm>
+                <h4>COMMUNITY</h4>
+              </Col>
+              <Col sm>
+                <h4>LEGAL</h4>
+              </Col>
+            </Row>
+          </Container>
+        </footer>
+      </div>
     </div>
   );
 };
