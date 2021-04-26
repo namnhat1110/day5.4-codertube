@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Row,
   Col,
@@ -21,10 +22,11 @@ const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState(``);
   const [genre, setGenre] = useState([]);
+  const [movieTrailerKey, setMovieTrailerKey] = useState('');
+  const [modalOpen, setModalOpen] = useState(false)
 
   const fetchMovies = async () => {
     let urlParams = `${BACKEND_URL}movie/upcoming?api_key=${API_KEY}`;
-
     if (query !== ``) {
       urlParams = `${BACKEND_URL}search/movie?api_key=${API_KEY}&query=${query}`;
     }
@@ -36,7 +38,7 @@ const HomePage = () => {
 
   const fetchGenre = async () => {
     const resp = await fetch(
-      `${BACKEND_URL}genre/movie/list?api_key=${API_KEY}`
+      `${BACKEND_URL}genre/movie/list?api_key=${API_KEY}`,
     );
     const data = await resp.json();
     console.log({ data });
@@ -51,6 +53,20 @@ const HomePage = () => {
   useEffect(() => {
     fetchGenre();
   }, []);
+
+  const onFetchYouTubeVideoId = async (id) => {
+    console.log("onFetchYouTubeVideoId", id);
+
+    const url = `${BACKEND_URL}movie/${id}/videos?api_key=${API_KEY}`;
+    const resp = await fetch(url);
+    const json = await resp.json();
+    console.log({ json });
+    if (json.results.length > 0) {
+      setMovieTrailerKey(json.results[0]);
+      setModalOpen(!modalOpen)
+    }
+  };
+
 
   return (
     <div>
@@ -82,6 +98,13 @@ const HomePage = () => {
             Least popular to Most popular
           </button>
           <Row>
+
+            <ModalBox
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              movieTrailerKey={movieTrailerKey}
+            />
+
             {movies.map((m) => {
               return (
                 <Col>
@@ -92,13 +115,6 @@ const HomePage = () => {
                     />
                     <Card.Body>
                       <Card.Title>{m.title}</Card.Title>
-                      {/* <Card.Title>
-                                            {genre.map(g => {
-                                                return (
-                                                    g.name
-                                                )
-                                            })}
-                                        </Card.Title> */}
                       <hr className="solid"></hr>
                       <Card.Text
                         style={{
@@ -109,7 +125,9 @@ const HomePage = () => {
                       >
                         {m.overview}
                       </Card.Text>
-                      <ModalBox />
+                      <Button onClick={() => onFetchYouTubeVideoId(m.id)}>
+                        Trailer
+                      </Button>
                       <hr className="solid"></hr>
                       <Card.Text>
                         Rating: {m.vote_average} from {m.vote_count} votes
@@ -128,6 +146,7 @@ const HomePage = () => {
           </Row>
         </Col>
       </Row>
+
       <div>
         <footer>
           <Container>
