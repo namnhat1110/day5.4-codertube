@@ -21,6 +21,8 @@ const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState(``);
   const [genre, setGenre] = useState([]);
+  const [movieTrailerKey, setMovieTrailerKey] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchMovies = async () => {
     let urlParams = `${BACKEND_URL}movie/upcoming?api_key=${API_KEY}`;
@@ -52,6 +54,18 @@ const HomePage = () => {
     fetchGenre();
   }, []);
 
+  const onFetchYoutubeVideoID = async (id) => {
+    console.log("hi", id);
+    const resp = await fetch(
+      `${BACKEND_URL}movie/${id}/videos?api_key=${API_KEY}`
+    );
+    const json = await resp.json();
+    console.log(json);
+    if (json.results.length > 0) {
+      setMovieTrailerKey(json.results[0].key);
+      setModalOpen(!modalOpen);
+    }
+  };
   return (
     <div>
       <NavigationBar query={query} setQuery={setQuery} />
@@ -82,6 +96,11 @@ const HomePage = () => {
             Least popular to Most popular
           </button>
           <Row>
+            <ModalBox
+              movieTrailerKey={movieTrailerKey}
+              setModalOpen={setModalOpen}
+              modalOpen={modalOpen}
+            />
             {movies.map((m) => {
               return (
                 <Col>
@@ -92,13 +111,7 @@ const HomePage = () => {
                     />
                     <Card.Body>
                       <Card.Title>{m.title}</Card.Title>
-                      {/* <Card.Title>
-                                            {genre.map(g => {
-                                                return (
-                                                    g.name
-                                                )
-                                            })}
-                                        </Card.Title> */}
+
                       <hr className="solid"></hr>
                       <Card.Text
                         style={{
@@ -109,7 +122,7 @@ const HomePage = () => {
                       >
                         {m.overview}
                       </Card.Text>
-                      <ModalBox />
+
                       <hr className="solid"></hr>
                       <Card.Text>
                         Rating: {m.vote_average} from {m.vote_count} votes
@@ -117,6 +130,9 @@ const HomePage = () => {
                       <Card.Text>Popularity: {m.popularity}</Card.Text>
                       <Card.Text> Release date: {m.release_date}</Card.Text>
                       <hr className="solid"></hr>
+                      <Button onClick={() => onFetchYoutubeVideoID(m.id)}>
+                        Trailer
+                      </Button>
                       <Nav.Link as={Link} to={`movie/${m.id}`}>
                         View Detail
                       </Nav.Link>
