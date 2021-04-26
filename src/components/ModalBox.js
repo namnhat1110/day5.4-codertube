@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import React from "react";
+import { Modal } from "react-bootstrap";
 
 import YoutubeEmbed from "../components/YoutubeEmbed";
 
@@ -13,7 +13,7 @@ const ModalBox = (props) => {
         aria-labelledby="example-modal-sizes-title-xl"
       >
         <Modal.Body>
-          <YoutubeEmbed embedId={props.movieTrailerKey} />
+          <YoutubeEmbed embedId={props.movieTrailerKey.key} />
         </Modal.Body>
       </Modal>
     </div>

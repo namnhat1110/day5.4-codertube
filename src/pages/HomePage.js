@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Row,
   Col,
@@ -26,7 +27,6 @@ const HomePage = () => {
 
   const fetchMovies = async () => {
     let urlParams = `${BACKEND_URL}movie/upcoming?api_key=${API_KEY}`;
-
     if (query !== ``) {
       urlParams = `${BACKEND_URL}search/movie?api_key=${API_KEY}&query=${query}`;
     }
@@ -55,17 +55,18 @@ const HomePage = () => {
   }, []);
 
   const onFetchYoutubeVideoID = async (id) => {
-    console.log("hi", id);
-    const resp = await fetch(
-      `${BACKEND_URL}movie/${id}/videos?api_key=${API_KEY}`
-    );
+    console.log("onFetchYouTubeVideoId", id);
+
+    const url = `${BACKEND_URL}movie/${id}/videos?api_key=${API_KEY}`;
+    const resp = await fetch(url);
     const json = await resp.json();
-    console.log(json);
+    console.log({ json });
     if (json.results.length > 0) {
-      setMovieTrailerKey(json.results[0].key);
+      setMovieTrailerKey(json.results[0]);
       setModalOpen(!modalOpen);
     }
   };
+
   return (
     <div>
       <NavigationBar query={query} setQuery={setQuery} />
@@ -97,10 +98,11 @@ const HomePage = () => {
           </button>
           <Row>
             <ModalBox
-              movieTrailerKey={movieTrailerKey}
-              setModalOpen={setModalOpen}
               modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              movieTrailerKey={movieTrailerKey}
             />
+
             {movies.map((m) => {
               return (
                 <Col>
@@ -111,7 +113,6 @@ const HomePage = () => {
                     />
                     <Card.Body>
                       <Card.Title>{m.title}</Card.Title>
-
                       <hr className="solid"></hr>
                       <Card.Text
                         style={{
@@ -122,7 +123,6 @@ const HomePage = () => {
                       >
                         {m.overview}
                       </Card.Text>
-
                       <hr className="solid"></hr>
                       <Card.Text>
                         Rating: {m.vote_average} from {m.vote_count} votes
@@ -144,6 +144,7 @@ const HomePage = () => {
           </Row>
         </Col>
       </Row>
+
       <div>
         <footer>
           <Container>
